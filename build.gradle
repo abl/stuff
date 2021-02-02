@@ -1,0 +1,104 @@
+plugins {
+    // Build "shadow" JARs for Heroku
+    id 'com.github.johnrengelman.shadow' version '6.1.0'
+
+    // Apply the java plugin to add support for Java
+    id 'java'
+
+    // Apply the application plugin to add support for building a CLI application.
+    id 'application'
+
+    // Lombok provides shorthand for repetitive Java tasks
+    id "io.freefair.lombok" version "5.3.0"
+
+    // Spotless to format code easily
+    id "com.diffplug.spotless" version "5.9.0"
+
+    // Check for updates to dependencies
+    id "com.github.ben-manes.versions" version "0.36.0"
+}
+
+repositories {
+    // Use jcenter for resolving dependencies.
+    // You can declare any Maven/Ivy/file repository here.
+    jcenter()
+}
+
+dependencies {
+    // Simple HTTP framework - http://sparkjava.com/
+    implementation 'com.sparkjava:spark-core:2.9.3'
+
+    // Basic logging support; used by Spark
+    implementation "org.slf4j:slf4j-simple:2.0.0-alpha1"
+
+    // Jackson to serialize/deserialize JSON
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.12.1'
+
+    // Use JUnit Jupiter API for testing.
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.7.0'
+
+    // Use JUnit Jupiter Engine for testing.
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.7.0'
+
+    // Use dagger for dependency injection
+    implementation 'com.google.dagger:dagger:2.31.2'
+    annotationProcessor 'com.google.dagger:dagger-compiler:2.31.2'
+
+    // Annotations such as Nullable
+    implementation 'com.google.code.findbugs:annotations:3.0.1'
+
+    // Force JRE Guava to work around issues with Truth
+    testImplementation "com.google.guava:guava:30.1-jre"
+
+    // Fluent assertions for testing
+    testImplementation 'com.google.truth:truth:1.1.2'
+
+    // MongoDB client
+    implementation 'org.mongodb:mongodb-driver:3.12.7'
+}
+
+application {
+    // Define the main class for the application.
+    mainClassName = 'edu.northeastern.cs5500.backend.App'
+}
+
+test {
+    // Use junit platform for unit tests
+    useJUnitPlatform()
+}
+
+task stage(dependsOn: ['clean', 'shadowJar'])
+
+// Target Java 1.11 - make sure system.properties matches this as well
+sourceCompatibility = 1.11
+targetCompatibility = 1.11
+
+sourceSets {
+    main {
+        java {
+            srcDirs 'src/main/java'
+            srcDirs 'build/generated/sources/annotationProcessor/java/main'
+        }
+    }
+    test {
+        java {
+            srcDirs 'src/test/java'
+            srcDirs 'build/generated/sources/annotationProcessor/java/test'
+        }
+    }
+}
+
+spotless {
+    format 'misc', {
+        target '**/*.gradle', '**/*.md', '**/.gitignore'
+        targetExclude 'build/**'
+
+        trimTrailingWhitespace()
+        indentWithSpaces()
+        endWithNewline()
+    }
+    java {
+        targetExclude 'build/**'
+        googleJavaFormat().aosp()
+    }
+}

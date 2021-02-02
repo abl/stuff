@@ -1,0 +1,1 @@
+web: java -jar ./build/libs/edu.northeastern.cs5500.backend-all.jar

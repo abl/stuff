@@ -15,13 +15,9 @@ import edu.northeastern.cs5500.backend.controller.UserController;
 import edu.northeastern.cs5500.backend.model.User;
 import javax.inject.Inject;
 import javax.inject.Singleton;
-
-import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
-import spark.Request;
-import spark.Response;
-
 import org.bson.types.ObjectId;
+import spark.Request;
 
 @Singleton
 @Slf4j

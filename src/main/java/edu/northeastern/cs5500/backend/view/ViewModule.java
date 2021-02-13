@@ -17,4 +17,10 @@ public class ViewModule {
     public View provideStatusView(StatusView statusView) {
         return statusView;
     }
+
+    @Provides
+    @IntoSet
+    public View provideUserView(UserView userView) {
+        return userView;
+    }
 }

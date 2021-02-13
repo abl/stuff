@@ -3,11 +3,17 @@ package edu.northeastern.cs5500.backend.repository;
 import dagger.Module;
 import dagger.Provides;
 import edu.northeastern.cs5500.backend.model.Stuff;
+import edu.northeastern.cs5500.backend.model.User;
 
 @Module
 public class RepositoryModule {
     @Provides
     public GenericRepository<Stuff> provideStuffRepository() {
+        return new InMemoryRepository<>();
+    }
+
+    @Provides
+    public GenericRepository<User> provideUserRepository() {
         return new InMemoryRepository<>();
     }
 }

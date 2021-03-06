@@ -26,7 +26,7 @@ public class InMemoryRepository<T extends Model> implements GenericRepository<T>
         ObjectId id = item.getId();
         if (id == null) {
             id = new ObjectId();
-            item.setId(new ObjectId());
+            item.setId(id);
         }
         collection.put(id, item);
         return item;

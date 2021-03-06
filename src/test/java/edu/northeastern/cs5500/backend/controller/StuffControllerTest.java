@@ -27,6 +27,15 @@ class StuffControllerTest {
     }
 
     @Test
+    void testCanGetStuffById() {
+        StuffController stuffController = new StuffController(new InMemoryRepository<Stuff>());
+
+        for (Stuff stuff : stuffController.getStuff()) {
+            assertThat(stuffController.getStuff(stuff.getId())).isNotNull();
+        }
+    }
+
+    @Test
     void testCanAddStuff() {
         // This test should NOT call register
         // TODO: implement this test.

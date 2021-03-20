@@ -45,7 +45,7 @@ public class UserController {
 
     @Nullable
     public User getUser(@Nonnull ObjectId uuid) {
-        log.debug("UserController > getUser({})", uuid);
+        log.info("UserController > getUser({})", uuid);
         return userRepository.get(uuid);
     }
 

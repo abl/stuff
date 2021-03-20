@@ -40,7 +40,7 @@ public class SessionControllerTest {
         final String password = "password";
         final String otherPassword = "otherPassword";
         UserController uC = new UserController(new InMemoryRepository<User>());
-        User user = uC.addUser(createTestUser(emailAddress, password));
+        uC.addUser(createTestUser(emailAddress, password));
 
         SessionController sC = new SessionController(uC, new InMemoryRepository<Session>());
 

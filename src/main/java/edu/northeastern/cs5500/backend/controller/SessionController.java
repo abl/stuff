@@ -27,7 +27,7 @@ public class SessionController {
     }
 
     @Nullable
-    Session createSession(@Nonnull String emailAddress, @Nonnull String password) {
+    public Session createSession(@Nonnull String emailAddress, @Nonnull String password) {
         User user = userController.getUserByEmailAddress(emailAddress);
         if (user == null) return null;
         if (!user.getPassword().equals(password)) return null;
@@ -46,7 +46,7 @@ public class SessionController {
     }
 
     @Nullable
-    User getUserForSession(@Nonnull ObjectId sessionId) {
+    public User getUserForSession(@Nonnull ObjectId sessionId) {
         Session session = sessionRepository.get(sessionId);
 
         if (session == null) return null;

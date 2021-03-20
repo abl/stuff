@@ -20,27 +20,6 @@ public class UserController {
         this.userRepository = userRepository;
 
         log.info("UserController > construct");
-
-        if (userRepository.count() > 0) {
-            return;
-        }
-
-        log.info("UserController > construct > adding default user");
-
-        final User defaultUser1 = new User();
-        defaultUser1.setUsername("alice");
-
-        final User defaultUser2 = new User();
-        defaultUser2.setUsername("bob");
-        defaultUser2.setEmailAddress("bob@fakedomain.nope");
-
-        try {
-            addUser(defaultUser1);
-            addUser(defaultUser2);
-        } catch (Exception e) {
-            log.error("UserController > construct > adding default user > failure?");
-            e.printStackTrace();
-        }
     }
 
     @Nullable
@@ -66,6 +45,8 @@ public class UserController {
 
         ObjectId id = user.getId();
 
+        user.setEmailAddress(user.getEmailAddress().toLowerCase());
+
         if (id != null && userRepository.get(id) != null) {
             // TODO: replace with a real duplicate key exception
             throw new Exception("DuplicateKeyException");
@@ -82,5 +63,24 @@ public class UserController {
     public void deleteUser(@Nonnull ObjectId id) throws Exception {
         log.debug("UserController > deleteUser(...)");
         userRepository.delete(id);
+    }
+
+    @Nullable
+    /**
+     * Attempt to get a user by emailAddress.
+     *
+     * @param emailAddress the emailAddress to match
+     * @return a user if one matches; null if there is no match
+     */
+    public User getUserByEmailAddress(@Nonnull String emailAddress) {
+        // TODO: This is very inefficient - a better approach would rely on extending repository
+        Collection<User> users = getUser();
+
+        for (User user : users) {
+            if (user.getEmailAddress().equalsIgnoreCase(emailAddress)) {
+                return user;
+            }
+        }
+        return null;
     }
 }

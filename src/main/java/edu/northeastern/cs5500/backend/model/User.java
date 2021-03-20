@@ -7,12 +7,15 @@ import org.bson.types.ObjectId;
 @Data
 public class User implements Model {
     private ObjectId id;
-    private String username;
     private String emailAddress;
+    private String password;
 
     /** @return true if this Stuff is valid */
     @JsonIgnore
     public boolean isValid() {
-        return username != null && !username.isEmpty();
+        return emailAddress != null
+                && !emailAddress.isEmpty()
+                && password != null
+                && !password.isEmpty();
     }
 }

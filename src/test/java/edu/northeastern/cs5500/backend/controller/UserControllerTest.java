@@ -4,26 +4,17 @@
 package edu.northeastern.cs5500.backend.controller;
 
 import static com.google.common.truth.Truth.assertThat;
-import static com.google.common.truth.Truth.assertWithMessage;
 
 import edu.northeastern.cs5500.backend.model.User;
 import edu.northeastern.cs5500.backend.repository.InMemoryRepository;
 import org.junit.jupiter.api.Test;
 
 class UserControllerTest {
-    @Test
-    void testRegisterCreatesUser() {
-        UserController UserController = new UserController(new InMemoryRepository<User>());
-        assertThat(UserController.getUser()).isNotEmpty();
-    }
-
-    @Test
-    void testRegisterCreatesValidUser() {
-        UserController UserController = new UserController(new InMemoryRepository<User>());
-
-        for (User user : UserController.getUser()) {
-            assertWithMessage(user.getUsername()).that(user.isValid()).isTrue();
-        }
+    User createTestUser(String emailAddress, String password) {
+        User user = new User();
+        user.setEmailAddress(emailAddress);
+        user.setPassword(password);
+        return user;
     }
 
     @Test
@@ -42,5 +33,21 @@ class UserControllerTest {
     void testCanDeleteUser() {
         // This test should NOT call register
         // TODO: implement this test
+    }
+
+    @Test
+    void testCanGetUserByEmailAddress() throws Exception {
+        final String emailAddress = "a@b.com";
+        final String otherEmailAddress = "c@d.com";
+        UserController uC = new UserController(new InMemoryRepository<User>());
+        User user = uC.addUser(createTestUser(emailAddress, "password1"));
+        User otherUser = uC.addUser(createTestUser(otherEmailAddress, "password2"));
+
+        // Make sure that we aren't just getting the same user
+        assertThat(user).isNotEqualTo(otherUser);
+
+        // Make sure we're getting the specific user we requested
+        assertThat(uC.getUserByEmailAddress(emailAddress)).isEqualTo(user);
+        assertThat(uC.getUserByEmailAddress(otherEmailAddress)).isEqualTo(otherUser);
     }
 }

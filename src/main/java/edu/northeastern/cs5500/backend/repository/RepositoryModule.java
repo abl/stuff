@@ -4,6 +4,7 @@ import dagger.Module;
 import dagger.Provides;
 import edu.northeastern.cs5500.backend.model.Stuff;
 import edu.northeastern.cs5500.backend.model.User;
+import edu.northeastern.cs5500.backend.service.MongoDBService;
 
 @Module
 public class RepositoryModule {
@@ -13,8 +14,8 @@ public class RepositoryModule {
     }
 
     @Provides
-    public GenericRepository<User> provideUserRepository() {
-        return new InMemoryRepository<>();
+    public GenericRepository<User> provideUserRepository(MongoDBService mongoDBService) {
+        return new MongoDBRepository<>(User.class, mongoDBService);
     }
 }
 
